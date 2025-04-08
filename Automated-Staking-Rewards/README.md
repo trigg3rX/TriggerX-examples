@@ -1,4 +1,4 @@
-# 🪙 StakingRewards - TriggerX Automation Example
+# 🪙 StakingRewards - TriggerX Event-Based Job Example
 
 This project demonstrates how to **automate event-based reward distribution** using [TriggerX](https://www.triggerx.network/). Built with [Foundry](https://book.getfoundry.sh/), the `StakingRewards` smart contract allows users to stake tokens and automatically receive proportional rewards **when a threshold is reached**, with distribution triggered by **TriggerX**.
 

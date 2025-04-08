@@ -5,7 +5,7 @@ import {Script, console} from "forge-std/Script.sol";
 import {StakingRewards} from "../src/StakingRewards.sol";
 import {MockERC20} from "../src/MockERC20.sol";
 
-contract DeployStaking is Script {
+contract DeployStakingReards is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
