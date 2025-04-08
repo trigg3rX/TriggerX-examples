@@ -50,16 +50,28 @@ forge install
 forge test
 ```
 
-### Deploy Locally
+### Deploy on supported Testnet
 
-```bash
-anvil
-# In a new terminal
-forge script script/Deploy.s.sol --rpc-url http://localhost:8545 --private-key YOUR_KEY --broadcast
+1. **Create a `.env`** file with:
+
+```env
+PRIVATE_KEY=your_private_key
+OP_SEPOLIA_RPC_URL=https://sepolia.optimism.io
+OPTIMISM_ETHERSCAN_API_KEY=your_etherscan_api_key
 ```
 
----
+2. **Deploy & Verify**:
 
+```bash
+forge script script/DeployBalanceMaintainer.s.sol \
+  --fork-url $OP_SEPOLIA_RPC_URL \
+  --broadcast \
+  --verify
+```
+
+> ✅ *Verification enables function selection in the TriggerX interface.*
+
+---
 
 ## ⏱️ TriggerX Integration
 
