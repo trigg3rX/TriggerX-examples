@@ -13,9 +13,9 @@ contract StakingRewards {
     uint256 public totalStaked;
     uint256 public lastRewardDistribution;
     uint256 public thresholdMilestone; // New milestone system
-
+    uint256 public staking_threshold; 
+    
     uint256 public constant REWARD_INTERVAL = 1 days;
-    uint256 public constant STAKING_THRESHOLD = 1000 ether; // 1000 staking tokens
 
     // Events
     event Staked(address indexed user, uint256 amount);
@@ -23,10 +23,15 @@ contract StakingRewards {
     event RewardsDistributed(uint256 totalRewards, uint256 timestamp);
     event ThresholdReached(uint256 totalStaked, uint256 threshold);
 
-    constructor(address _stakingToken, address _rewardToken) {
+    constructor(
+        address _stakingToken,
+        address _rewardToken,
+        uint256 _staking_threshold
+    ) {
         stakingToken = IERC20(_stakingToken);
         rewardToken = IERC20(_rewardToken);
         lastRewardDistribution = block.timestamp;
+        staking_threshold = _staking_threshold;
     }
 
     function stake(uint256 amount) external {
@@ -43,10 +48,10 @@ contract StakingRewards {
         emit Staked(msg.sender, amount);
 
         // Check if we've crossed the next threshold milestone
-        uint256 currentMilestone = totalStaked / STAKING_THRESHOLD;
+        uint256 currentMilestone = totalStaked / staking_threshold;
         if (currentMilestone > thresholdMilestone) {
             thresholdMilestone = currentMilestone;
-            emit ThresholdReached(totalStaked, STAKING_THRESHOLD);
+            emit ThresholdReached(totalStaked, staking_threshold);
         }
     }
 

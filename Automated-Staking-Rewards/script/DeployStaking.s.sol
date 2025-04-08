@@ -17,7 +17,8 @@ contract DeployStaking is Script {
         // Deploy staking contract
         StakingRewards staking = new StakingRewards(
             address(stakingToken),
-            address(rewardToken)
+            address(rewardToken),
+            10 ether // Set a threshold for staking
         );
         
         // Mint some tokens to the deployer for testing

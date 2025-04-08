@@ -23,7 +23,7 @@ contract StakingRewardsTest is Test {
         rewardToken = new MockERC20("Reward Token", "RWD", 18);
         
         // Deploy staking contract
-        staking = new StakingRewards(address(stakingToken), address(rewardToken));
+        staking = new StakingRewards(address(stakingToken), address(rewardToken),1000 ether);
         
         // Mint tokens to users
         stakingToken.mint(alice, INITIAL_BALANCE);
