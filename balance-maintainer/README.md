@@ -71,6 +71,10 @@ forge script script/DeployBalanceMaintainer.s.sol \
 
 > ✅ *Verification enables function selection in the TriggerX interface.*
 
+3. **Fund the Contract**:
+   
+> ⚠️ **Important**: After deployment, make sure to send enough ETH to the BalanceMaintainer contract address. The contract needs these funds to perform top-ups for the tracked addresses. Without sufficient funds, the top-up operations will fail.
+
 ---
 
 ## ⏱️ TriggerX Integration
