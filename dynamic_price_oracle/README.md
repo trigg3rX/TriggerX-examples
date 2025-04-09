@@ -37,73 +37,82 @@ A robust price oracle that:
 A simple mock contract to simulate price feeds for local testing and simulation.
 
 ---
+## 📦 Foundry Setup
 
-## 🚀 Automation with TriggerX
+### Prerequisites
 
-We’ve created a script and deployed it to IPFS that:
-- Calls `prepareUpdateParams()` from the oracle
-- Uses those parameters to call `updatePrices()` automatically
+- [Foundry](https://book.getfoundry.sh/getting-started/installation) installed
 
-### 🧪 View the Trigger Script
+### Getting Started
 
-📦 [IPFS - Trigger Script](https://ipfs.io/ipfs/QmDummyHashExample123456789)  
-*(Replace with your actual IPFS CID when available)*
-
----
-
-## ⚙️ TriggerX Integration Steps
-
-Follow these steps to automate price updates using TriggerX:
-
-1. **Prepare Your Script**  
-   Create a script that:
-   - Calls `prepareUpdateParams()` on the `DynamicPriceOracle`
-   - Passes the returned struct into `updatePrices()`  
-
-2. **Upload to IPFS**  
-   Use tools like [web3.storage](https://web3.storage) or IPFS CLI to upload the script.
-
-3. **Go to [TriggerX App](https://app.triggerx.io)**  
-   Create a new trigger:
-   - Select the **DynamicPriceOracle** contract address
-   - Set method to `updatePrices(PriceUpdateParams)`
-   - Link your IPFS script using the IPFS hash
-
-4. **Configure Execution Settings**  
-   - Set frequency (e.g. every 1 hour)
-   - Define gas limits and simulation checks
-   - Choose AVS (automation validator service) node(s)
-
-5. **Launch the Job**  
-   Once deployed, AVS will monitor and automatically call `updatePrices()` using fresh parameters.
-
----
-
-## 📦 Deployment Parameters
-
-When deploying `DynamicPriceOracle`, provide:
-- `_minUpdateInterval`: Minimum seconds between price updates
-- `_volatilityThreshold`: Multiplier for calculating deviation thresholds
-- `_priceFeed`: Address of a price feed (mock or Chainlink-compatible)
-
----
-
-## 🧪 Local Development
-
-Install dependencies:
 ```bash
+git clone https://github.com/your-username/dynamic-price-oracle.git
+cd dynamic-price-oracle
 forge install
 ```
 
-Run tests:
+### Run Tests
+
 ```bash
 forge test
 ```
 
-Simulate updates:
-```bash
-forge script scripts/UpdatePrices.s.sol --fork-url $RPC_URL --broadcast
+### Deploy on supported Testnet
+
+1. **Create a `.env`** file with:
+
+```env
+PRIVATE_KEY=your_private_key
+OP_SEPOLIA_RPC_URL=https://sepolia.optimism.io
+OPTIMISM_ETHERSCAN_API_KEY=your_etherscan_api_key
 ```
+
+2. **Deploy & Verify**:
+
+```bash
+forge script script/DeployDynamicPriceOracle.s.sol \
+  --fork-url $OP_SEPOLIA_RPC_URL \
+  --broadcast \
+  --verify
+```
+
+> ✅ *Verification enables proper function recognition on TriggerX.*
+
+3. **Register Pair Data** (after deployment):
+
+Call `setInitialPrice()` with token pair, initial price, and other settings  
+*(or use a helper script from the repo to automate it)*
+
+---
+
+## ⏱️ TriggerX Integration
+
+Use **TriggerX** to automate calls to `updatePrices()` using values returned from `prepareUpdateParams()`.
+
+### ✅ Steps to Set It Up
+
+1. Go to: [Create Your First Job on TriggerX](https://triggerx.gitbook.io/triggerx-docs/create-your-first-job)
+2. Choose **Time-Based Trigger**
+3. Set the interval (e.g., every 15 minutes)
+4. Provide the contract address and target function: `updatePrices((PriceUpdateParams))`
+5. Use a custom script that:
+   - Calls `prepareUpdateParams()`
+   - Passes the result to `updatePrices()`
+
+6. Upload the script to IPFS
+
+> 📦 Example script: [IPFS - Trigger Script](https://ipfs.io/ipfs/QmDummyHashExample123456789)
+
+7. Paste your IPFS URL in the TriggerX Job setup
+8. ✅ You’re done! TriggerX will now keep your oracle updated on-chain
+
+---
+
+## 🔐 Security Considerations
+
+- Only owner can configure new token pairs.
+- `updatePrices()` will revert if called too soon or with stale parameters.
+- Cooldown and volatility thresholds protect against spam and noise updates.
 
 ---
 
@@ -115,5 +124,7 @@ MIT
 
 ## 🙌 Contribution
 
-Feel free to open PRs or issues to improve this example!
+Found an issue? Want to extend volatility metrics?  
+PRs are welcome — let's build smarter oracles together!
+```
 
