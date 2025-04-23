@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 contract BalanceMaintainer {
     address public owner;
@@ -12,8 +12,8 @@ contract BalanceMaintainer {
     event BalanceToppedUp(address indexed recipient, uint256 amount);
     event MinimumBalanceSet(address indexed target, uint256 amount);
 
-    constructor() payable {
-        owner = msg.sender;
+    constructor(address _owner) payable {
+        owner = _owner;
     }
 
     modifier onlyOwner() {
@@ -73,6 +73,23 @@ contract BalanceMaintainer {
 
     function getContractBalance() external view returns (uint256) {
         return address(this).balance;
+    }
+
+    // New function to get all tracked addresses and their minimum balances
+    function getAllTrackedAddressesWithBalances() external view returns (
+        address[] memory addresses,
+        uint256[] memory balances
+    ) {
+        uint256 length = trackedAddresses.length;
+        addresses = new address[](length);
+        balances = new uint256[](length);
+
+        for (uint256 i = 0; i < length; i++) {
+            addresses[i] = trackedAddresses[i];
+            balances[i] = minimumBalances[trackedAddresses[i]];
+        }
+
+        return (addresses, balances);
     }
 
     receive() external payable {}

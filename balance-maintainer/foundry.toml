@@ -1,6 +1,25 @@
 [profile.default]
-src = "src"
-out = "out"
-libs = ["lib"]
+src = 'src'
+out = 'out'
+libs = ['lib']
+solc = '0.8.20'
+ffi = true  # Enable FFI for verification commands
 
-# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+[rpc_endpoints]
+op_sepolia = "${OP_SEPOLIA_RPC_URL}"
+base_sepolia = "${BASE_SEPOLIA_RPC_URL}"
+
+[etherscan]
+op_sepolia = { key = "${OPSCAN_API_KEY}", url = "https://api-sepolia-optimistic.etherscan.io/api" }
+base_sepolia = { key = "${BASESCAN_API_KEY}", url = "https://api-sepolia.basescan.org/api" }
+
+# Chain configurations
+[profile.chains.op_sepolia]
+chain_id = 11155420
+url = "${OP_SEPOLIA_RPC_URL}"
+verifier = { url = "https://api-sepolia-optimistic.etherscan.io/api", api_key = "${OPSCAN_API_KEY}" }
+
+[profile.chains.base_sepolia]
+chain_id = 84532
+url = "${BASE_SEPOLIA_RPC_URL}"
+verifier = { url = "https://api-sepolia.basescan.org/api", api_key = "${BASESCAN_API_KEY}" }

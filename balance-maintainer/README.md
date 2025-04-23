@@ -1,114 +1,66 @@
-# 🔄 BalanceMaintainer - TriggerX Automation Example
+## Foundry
 
-This project demonstrates an example of **automating time-based balance maintenance** using [TriggerX](https://www.triggerx.network/). Built with [Foundry](https://book.getfoundry.sh/), the `BalanceMaintainer` smart contract ensures that specific addresses always maintain a minimum balance by topping them up periodically.
+**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
-> 💡 This is a great starting point for using **TriggerX** to automate time-based actions on-chain.  
-> 📚 Check out the guide: [Create Your First Job on TriggerX](https://triggerx.gitbook.io/triggerx-docs/create-your-first-job)
+Foundry consists of:
 
----
+-   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
+-   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
+-   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
+-   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
-## 🧠 What This Contract Does
+## Documentation
 
-The `BalanceMaintainer` contract allows an owner to:
+https://book.getfoundry.sh/
 
-- ✅ Track multiple addresses.
-- 💰 Set a **minimum ETH balance** for each address.
-- ⏰ Automatically **top-up** those addresses when their balance drops below the minimum (executed at regular intervals using TriggerX).
-- 🔁 Enforce a **cooldown** between top-ups (default: `1 hour`).
+## Usage
 
----
+### Build
 
-## ⚙️ Features
-
-- **Batch Configuration:** Add multiple addresses with their required balances using `setMultipleAddressesWithBalance`.
-- **Automated Top-ups:** `maintainBalances` checks tracked addresses and tops them up if needed.
-- **Cooldown Support:** Prevents frequent top-ups with a 1-hour cooldown window.
-- **TriggerX Integration:** Automate the `maintainBalances` call with a time-based job on TriggerX.
-- **Events Emitted:**
-  - `BalanceToppedUp`: When an address is topped up.
-  - `MinimumBalanceSet`: When a new address and balance are set.
-
----
-
-## 📦 Foundry Setup
-
-### Prerequisites
-
-- [Foundry](https://book.getfoundry.sh/getting-started/installation) installed
-
-### Getting Started
-
-```bash
-git clone https://github.com/your-username/balance-maintainer.git
-cd balance-maintainer
-forge install
+```shell
+$ forge build
 ```
 
-### Run Tests
+### Test
 
-```bash
-forge test
+```shell
+$ forge test
 ```
 
-### Deploy on supported Testnet
+### Format
 
-1. **Create a `.env`** file with:
-
-```env
-PRIVATE_KEY=your_private_key
-OP_SEPOLIA_RPC_URL=https://sepolia.optimism.io
-OPTIMISM_ETHERSCAN_API_KEY=your_etherscan_api_key
+```shell
+$ forge fmt
 ```
 
-2. **Deploy & Verify**:
+### Gas Snapshots
 
-```bash
-forge script script/DeployBalanceMaintainer.s.sol \
-  --fork-url $OP_SEPOLIA_RPC_URL \
-  --broadcast \
-  --verify
+```shell
+$ forge snapshot
 ```
 
-> ✅ *Verification enables function selection in the TriggerX interface.*
+### Anvil
 
-3. **Fund the Contract**:
-   
-> ⚠️ **Important**: After deployment, make sure to send enough ETH to the BalanceMaintainer contract address. The contract needs these funds to perform top-ups for the tracked addresses. Without sufficient funds, the top-up operations will fail.
+```shell
+$ anvil
+```
 
----
+### Deploy
 
-## ⏱️ TriggerX Integration
+```shell
+$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```
 
-You can use **TriggerX** to call the `maintainBalances()` function at a fixed time interval.
+### Cast
 
-### ✅ Steps to Set It Up
+```shell
+$ cast <subcommand>
+```
 
-1. Go to: [Create Your First Job on TriggerX](https://triggerx.gitbook.io/triggerx-docs/create-your-first-job)
-2. Choose **Time-Based Trigger**
-3. Set the interval (e.g., every hour)
-4. Provide the contract address and the select target function `maintainBalances()`  
-5. **Use the provided script template from TriggerX docs** (no arguments needed for this function)  
-   👉 Template Link: [TriggerX Job Script Template](https://triggerx.gitbook.io/triggerx-docs/create-your-first-job#template)
-6. Upload the script to IPFS and paste the IPFS URL in the TriggerX Job setup
-7. Done! TriggerX will automatically call `maintainBalances()` at the specified time interval 🎯
+### Help
 
----
-
-## 🔐 Security Considerations
-
-- Only the contract owner can modify tracked addresses and minimum balances.
-- The contract will revert if it doesn't hold enough ETH to top up accounts.
-- `maintainBalances` is protected by a cooldown window to avoid abuse.
-
----
-
-## 📜 License
-
-MIT
-
----
-
-## 🙌 Contribution
-
-Feel free to open PRs or issues to improve this example!
-
+```shell
+$ forge --help
+$ anvil --help
+$ cast --help
+```
