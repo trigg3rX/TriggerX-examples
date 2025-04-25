@@ -2,9 +2,9 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Script.sol";
-import "../src/newBalanceMaintainer.sol";
+import "../src/TriggerXTemplateFactory.sol";
 
-contract DeployBalanceMaintainerFactory is Script {
+contract DeployTriggerXTemplateFactory is Script {
     function run() external {
         // Get the private key and API keys from environment
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -15,7 +15,7 @@ contract DeployBalanceMaintainerFactory is Script {
         console.log("Deploying to Optimism Sepolia...");
         vm.createSelectFork(vm.envString("OP_SEPOLIA_RPC"));
         vm.startBroadcast(deployerPrivateKey);
-        BalanceMaintainer balanceMaintainer = new BalanceMaintainer{salt: bytes32("BalanceMaintain")}(vm.addr(deployerPrivateKey));
+        TriggerXTemplateFactory balanceMaintainer = new TriggerXTemplateFactory{salt: bytes32("TriggerxtemplateFactory")}();
         vm.stopBroadcast();
         console.log("BalanceMaintainer deployed on Optimism Sepolia at:", address(balanceMaintainer));
 
@@ -33,26 +33,26 @@ contract DeployBalanceMaintainerFactory is Script {
         verifyOpCommand[9] = opScanKey;
         vm.ffi(verifyOpCommand);
         
-        // // Deploy to Base Sepolia
-        // console.log("\nDeploying to Base Sepolia...");
-        // vm.createSelectFork(vm.envString("BASE_SEPOLIA_RPC"));
-        // vm.startBroadcast(deployerPrivateKey);
-        // BalanceMaintainer baseimpl = new BalanceMaintainer{salt: bytes32("Balancemaintainer")}(vm.addr(deployerPrivateKey));
-        // vm.stopBroadcast();
-        // console.log("BalanceMaintainer deployed on Base Sepolia at:", address(baseimpl));
+        // Deploy to Base Sepolia
+        console.log("\nDeploying to Base Sepolia...");
+        vm.createSelectFork(vm.envString("BASE_SEPOLIA_RPC"));
+        vm.startBroadcast(deployerPrivateKey);
+        TriggerXTemplateFactory baseimpl = new TriggerXTemplateFactory{salt: bytes32("TriggerxtemplateFactory")}();
+        vm.stopBroadcast();
+        console.log("BalanceMaintainer deployed on Base Sepolia at:", address(baseimpl));
 
-        // // Verify on Base Sepolia
-        // string[] memory verifyBaseCommand = new string[](10);  // Fixed array size to 10
-        // verifyBaseCommand[0] = "forge";
-        // verifyBaseCommand[1] = "verify-contract";
-        // verifyBaseCommand[2] = vm.toString(address(baseimpl));
-        // verifyBaseCommand[3] = "BalanceMaintainerFactory";
-        // verifyBaseCommand[4] = "--chain-id";
-        // verifyBaseCommand[5] = "84532";
-        // verifyBaseCommand[6] = "--verifier-url";
-        // verifyBaseCommand[7] = "https://api-sepolia.basescan.org/api";
-        // verifyBaseCommand[8] = "--etherscan-api-key";
-        // verifyBaseCommand[9] = baseScanKey;
-        // vm.ffi(verifyBaseCommand);
+        // Verify on Base Sepolia
+        string[] memory verifyBaseCommand = new string[](10);  // Fixed array size to 10
+        verifyBaseCommand[0] = "forge";
+        verifyBaseCommand[1] = "verify-contract";
+        verifyBaseCommand[2] = vm.toString(address(baseimpl));
+        verifyBaseCommand[3] = "BalanceMaintainerFactory";
+        verifyBaseCommand[4] = "--chain-id";
+        verifyBaseCommand[5] = "84532";
+        verifyBaseCommand[6] = "--verifier-url";
+        verifyBaseCommand[7] = "https://api-sepolia.basescan.org/api";
+        verifyBaseCommand[8] = "--etherscan-api-key";
+        verifyBaseCommand[9] = baseScanKey;
+        vm.ffi(verifyBaseCommand);
     }
 }

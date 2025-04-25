@@ -6,14 +6,22 @@ contract BalanceMaintainer {
     mapping(address => uint256) public minimumBalances;
     address[] public trackedAddresses;
     mapping(address => bool) private isTracked;
-    uint256 public lastMaintenance;
-    uint256 public constant COOLDOWN = 1 hours;
+    // Track initialization state per proxy
+    mapping(address => bool) private proxyInitialized;
 
     event BalanceToppedUp(address indexed recipient, uint256 amount);
     event MinimumBalanceSet(address indexed target, uint256 amount);
 
-    constructor(address _owner) payable {
+    constructor() payable {
+        // Empty constructor for proxy compatibility
+    }
+
+    // Initialization function for proxies
+    function initialize(address _owner) external payable {
+        // Check if this proxy is already initialized
+        require(!proxyInitialized[msg.sender], "Proxy already initialized");
         owner = _owner;
+        proxyInitialized[msg.sender] = true;
     }
 
     modifier onlyOwner() {
@@ -44,11 +52,6 @@ contract BalanceMaintainer {
     }
 
     function maintainBalances() external {
-        require(
-            block.timestamp >= lastMaintenance + COOLDOWN,
-            "Cooldown period active"
-        );
-        lastMaintenance = block.timestamp;
         for (uint256 i = 0; i < trackedAddresses.length; i++) {
             address target = trackedAddresses[i];
             uint256 minBalance = minimumBalances[target];
@@ -75,7 +78,6 @@ contract BalanceMaintainer {
         return address(this).balance;
     }
 
-    // New function to get all tracked addresses and their minimum balances
     function getAllTrackedAddressesWithBalances() external view returns (
         address[] memory addresses,
         uint256[] memory balances
