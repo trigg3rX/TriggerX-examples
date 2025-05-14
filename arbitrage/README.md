@@ -38,6 +38,14 @@ cd arbitrage
 forge install
 ```
 
+If you encounter errors about missing dependencies (such as `forge-std` or `openzeppelin-contracts`), clean the `lib` directory and reinstall dependencies with the `--no-commit` flag:
+
+```bash
+rm -rf lib/*
+forge install foundry-rs/forge-std --no-commit
+forge install OpenZeppelin/openzeppelin-contracts --no-commit
+```
+
 3. Create a `.env` file in the root directory with the following variables:
 ```env
 PRIVATE_KEY=0x...  # Your wallet private key with 0x prefix
@@ -102,7 +110,29 @@ Parameters:
 Run the test suite:
 
 ```bash
-forge test
+forge test -vv
+```
+
+All tests should pass if dependencies are installed correctly.
+
+## Troubleshooting
+
+### Dependency Installation Issues
+
+If you see errors like `Source "forge-std/Script.sol" not found` or missing OpenZeppelin contracts, it usually means dependencies were not installed correctly or the `lib` directory is in a bad state. To fix:
+
+1. Remove the contents of the `lib` directory:
+   ```bash
+   rm -rf lib/*
+   ```
+2. Reinstall dependencies with the `--no-commit` flag:
+   ```bash
+   forge install foundry-rs/forge-std --no-commit
+   forge install OpenZeppelin/openzeppelin-contracts --no-commit
+   ```
+3. Run the tests again:
+   ```bash
+   forge test -vv
 ```
 
 ## Security

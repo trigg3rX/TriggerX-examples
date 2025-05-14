@@ -46,13 +46,14 @@ contract Arbitrage is Ownable {
     }
 
     // Execute arbitrage
-    function executeArbitrage(
-        uint256 amount,
-        bool buyFromDex1
-    ) external onlyOwner {
+    function executeArbitrage(uint256 amount, bool buyFromDex1) external {
         require(
             token1.balanceOf(address(this)) >= amount,
             "Insufficient token1 balance"
+        );
+        require(
+            amount <= 100 * 10 ** 18,
+            "Swap amount cannot exceed 100 tokens"
         );
 
         uint256 initialToken1Balance = token1.balanceOf(address(this));
