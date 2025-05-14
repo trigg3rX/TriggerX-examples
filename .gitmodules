@@ -1,6 +1,0 @@
-[submodule "copy-trading/lib/forge-std"]
-	path = copy-trading/lib/forge-std
-	url = https://github.com/foundry-rs/forge-std
-[submodule "copy-trading/lib/openzeppelin-contracts"]
-	path = copy-trading/lib/openzeppelin-contracts
-	url = https://github.com/OpenZeppelin/openzeppelin-contracts
