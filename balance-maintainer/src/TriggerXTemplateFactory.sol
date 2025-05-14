@@ -56,7 +56,7 @@ contract TriggerXTemplateFactory {
     // Get all registered implementations
     function getAllImplementations() external view returns (address[] memory) {
         return implementations;
-    }
+    }   
 
     // Get the number of registered implementations
     function getImplementationCount() external view returns (uint256) {
