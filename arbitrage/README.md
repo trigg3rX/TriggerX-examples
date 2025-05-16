@@ -22,8 +22,54 @@ arbitrage/
 │   └── Deploy.s.sol      # Deployment script
 ├── test/
 │   └── ArbitrageSystem.t.sol # Test suite
+├── condition/            # Condition checking and parameter generation
+│   ├── checkCondition.go # Script to check for arbitrage opportunities
+│   └── returnParameter.go # Script to generate arbitrage parameters
 └── foundry.toml          # Foundry configuration
 ```
+
+## Condition Checking System
+
+The `condition` directory contains two Go scripts that work together to check for arbitrage opportunities and generate the necessary parameters for execution:
+
+### checkCondition.go
+
+This script checks if there's a profitable arbitrage opportunity between two DEXes. It:
+
+1. Connects to the Ethereum network (currently configured for Sepolia Optimism)
+2. Retrieves contract addresses from the arbitrage contract
+3. Calculates output amounts from both DEXes for a given input amount
+4. Checks if the price difference exceeds the minimum profit threshold (1%)
+
+Output:
+- Returns `true` if an arbitrage opportunity exists
+- Returns `false` if no profitable opportunity is found
+
+### returnParameter.go
+
+This script generates the parameters needed for executing the arbitrage trade. It:
+
+1. Connects to the same network as checkCondition.go
+2. Calculates the optimal amount for arbitrage (default: 50 tokens)
+3. Determines which DEX to buy from based on price comparison
+4. Returns parameters in JSON format
+
+### Integration
+
+These scripts are designed to work together:
+1. First run `checkCondition.go` to verify if an opportunity exists
+2. If the condition is satisfied, run `returnParameter.go` to get the execution parameters
+3. Use the returned parameters to execute the arbitrage trade
+
+### Configuration
+
+Both scripts use the following configuration:
+- Network: Sepolia Optimism (https://sepolia.optimism.io)
+- Arbitrage Contract: 0x71a68cC59B6251F7FFE225f0579777E73EE4FcC6
+- Minimum Profit: 1% (100 basis points)
+- Default Trade Amount: 50 tokens
+
+To modify these settings, update the respective constants in the scripts.
 
 ## Setup
 
@@ -78,6 +124,8 @@ The system uses the following pre-deployed contract addresses:
 - LiquidityToken2: `0xe1A327AE69156ee7b5cE59A057b823c760438535`
 - DEX1: `0xD05E72F6C74Be61d74Cb7e003f6E869C287606b0`
 - DEX2: `0x02F957CF974797CF2CdeBd43994232A38802581c`
+
+Detailed contract addresses can be found here [Contracts](./CONTRACT.md)
 
 ## Usage
 
